@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "TINHLE AI - Agricultural Risk Dashboard",
   "scripts": {
-    "start": "npx serve . -l $PORT --no-clipboard"
+    "start": "npx -y serve@latest . -l $PORT --no-clipboard"
+  },
+  "dependencies": {
+    "serve": "^14.0.0"
   },
   "engines": {
     "node": ">=18"
