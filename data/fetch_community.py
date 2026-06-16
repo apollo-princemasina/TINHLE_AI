@@ -90,7 +90,7 @@ def fetch_community():
 
     SHEET_URL = (
         "https://docs.google.com/spreadsheets/d/"
-        "1FD5yDvOufPf8ClcECayRr7df7rrf_UhuJ80FkVtB2CI"
+        "101wlyOmjbchCJuhvFVT5SPq89OILTpj_z2AWXGaUCd4"
         "/export?format=csv"
     )
 
