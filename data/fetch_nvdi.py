@@ -5,14 +5,15 @@ from datetime import datetime, timedelta
 
 def fetch_ndvi():
 
+    end_date = datetime.today()
+    start_date = end_date - timedelta(days=730)
+
     try:
         ee.Initialize(project="tinhle-ai")
 
         point = ee.Geometry.Point([31.2444, -17.8875])
 
         # Use a long history so rolling features have enough values
-        end_date = datetime.today()
-        start_date = end_date - timedelta(days=730)
 
         start = start_date.strftime("%Y-%m-%d")
         end = end_date.strftime("%Y-%m-%d")
