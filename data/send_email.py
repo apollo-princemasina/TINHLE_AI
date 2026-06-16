@@ -12,6 +12,13 @@ SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY", "")
 
 
 def send_report(report):
+    print("--- send_report called ---")
+    print(f"RESEND_API_KEY configured: {bool(RESEND_API_KEY)}")
+    print(f"SENDGRID_API_KEY configured: {bool(SENDGRID_API_KEY)}")
+    print(f"TO_EMAIL: '{TO_EMAIL}'")
+    print(f"GMAIL_USER (EMAIL): '{EMAIL}'")
+    print(f"GMAIL_APP_PASSWORD configured: {bool(APP_PASSWORD)}")
+
     subject = "TINHLE AI Drought Assessment"
 
     body = f"""

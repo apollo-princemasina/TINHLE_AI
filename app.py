@@ -234,6 +234,9 @@ def send_report_endpoint():
             "report": report
         }
     except Exception as e:
+        import traceback
+        print("--- EXCEPTION IN /send-report endpoint ---")
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
 # =====================================
