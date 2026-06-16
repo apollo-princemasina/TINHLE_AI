@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from datetime import datetime
 from dotenv import load_dotenv
 
@@ -44,8 +45,8 @@ COMMUNITY_WEIGHT = 0.20
 # HOME
 # =====================================
 
-@app.get("/")
-def home():
+@app.get("/api")
+def api_home():
     return {
         "service": "TINHLE-AI",
         "status": "running",
@@ -239,3 +240,8 @@ def send_report_endpoint():
         "report": report
 
     }
+
+# =====================================
+# SERVE FRONTEND (Must be at the bottom)
+# =====================================
+app.mount("/", StaticFiles(directory="dashboard", html=True), name="dashboard")

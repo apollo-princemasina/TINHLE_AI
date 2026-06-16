@@ -1,5 +1,5 @@
 // Environment Configuration
-const API_URL = window.ENV?.API_URL || 'https://tinhleai.up.railway.app';
+const API_URL = window.ENV?.API_URL || '';
 
 document.addEventListener('DOMContentLoaded', () => {
     const runAssessmentBtn = document.getElementById('run-assessment-btn');
