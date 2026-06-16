@@ -8,7 +8,7 @@ uvicorn[standard]==0.29.0
 # Data & ML
 pandas==2.2.2
 numpy==1.26.4
-scikit-learn==1.4.2
+scikit-learn==1.6.1
 joblib==1.4.2
 
 # HTTP clients (for NASA, OpenMeteo calls)
