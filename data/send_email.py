@@ -19,36 +19,64 @@ def send_report(report):
     print(f"GMAIL_USER (EMAIL): '{EMAIL}'")
     print(f"GMAIL_APP_PASSWORD configured: {bool(APP_PASSWORD)}")
 
-    subject = "TINHLE AI Drought Assessment"
+    try:
+        from datetime import datetime
+        dt = datetime.fromisoformat(report.get("timestamp", datetime.now().isoformat()))
+        month = dt.month
+    except Exception:
+        from datetime import datetime
+        month = datetime.now().month
+
+    is_dry_season = 5 <= month <= 10
+    season_label = "Dry Season" if is_dry_season else "Rainy Season"
+    risk_class = report.get("tinhle_risk_class", "LOW")
+
+    if risk_class == "HIGH":
+        if not is_dry_season:
+            recommendation = (
+                "WARNING: High risk during the RAINY SEASON. Drought conditions detected when rain is expected. "
+                "Immediate action is required. Activating emergency risk funds may be a good idea, and "
+                "early intervention teams should act now."
+            )
+        else:
+            recommendation = (
+                "WARNING: High risk detected. Early action is required. Consider preparing contingency funds "
+                "and mitigation strategies."
+            )
+    elif risk_class == "MODERATE":
+        recommendation = (
+            "NOTICE: Moderate risk detected. Meet with your community and discuss what to do. "
+            "Encourage interviewing more farmers to keep reports updated."
+        )
+    else:
+        recommendation = (
+            "STATUS: Low risk detected. Everything is stable. Check again after 2 weeks."
+        )
+
+    subject = f"TINHLE AI Drought Assessment - {risk_class} RISK"
 
     body = f"""
 TINHLE AI REPORT
-
+-----------------------------------
 Location: {report['location']}
+Timestamp: {report.get('timestamp', '')}
+Season: {season_label}
 
-Predicted Rainfall:
-{report['predicted_rainfall']}
+MODEL METRICS:
+- Predicted Rainfall: {report['predicted_rainfall']} mm
+- Drought Probability: {report['drought_probability']:.2f}
+- Drought Class: {report['drought_class']}
+- Environmental Score: {report['environmental_score']}
+- Environmental Label: {report['environmental_label']}
+- Community Risk: {report['community_risk']}
 
-Drought Probability:
-{report['drought_probability']:.2f}
+OVERALL ASSESSMENT:
+- Final TINHLE Risk Index: {report['tinhle_risk']}
+- TINHLE Classification: {report['tinhle_risk_class']}
 
-Drought Class:
-{report['drought_class']}
-
-Environmental Score:
-{report['environmental_score']}
-
-Environmental Label:
-{report['environmental_label']}
-
-Community Risk:
-{report['community_risk']}
-
-Final TINHLE Risk:
-{report['tinhle_risk']}
-
-TINHLE Classification:
-{report['tinhle_risk_class']}
+STRATEGIC RECOMMENDATION:
+{recommendation}
+-----------------------------------
 """
 
     # 1. Check for Resend HTTPS API (Recommended for Railway)
