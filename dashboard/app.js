@@ -78,14 +78,17 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('explanation-class').style.color = gaugeColor;
         riskClassEl.className = `label badge-status status-badge ${badgeType}`;
 
+        // Calculate reused metrics
+        const droughtProbPercent = Math.round(data.drought_probability * 100);
+        const commRiskPercent = Math.round(data.community_risk * 100);
+
         // 3. Key Drivers summary
         const droughtBadge = data.drought_class === 'HIGH' ? 'critical' : data.drought_class === 'MODERATE' ? 'moderate' : 'stable';
-        updateBadge('drought-driver', data.drought_class, droughtBadge);
+        updateBadge('drought-driver', `${droughtProbPercent}% (${data.drought_class})`, droughtBadge);
         
         const envBadge = data.environmental_label === 'CRITICAL' ? 'severe' : data.environmental_label === 'WARNING' ? 'moderate' : 'stable';
-        updateBadge('env-driver', data.environmental_label, envBadge);
+        updateBadge('env-driver', `${data.environmental_score.toFixed(2)} (${data.environmental_label})`, envBadge);
         
-        const commRiskPercent = Math.round(data.community_risk * 100);
         const commBadge = commRiskPercent > 60 ? 'critical' : commRiskPercent > 30 ? 'moderate' : 'stable';
         updateBadge('community-driver', `${commRiskPercent}% Risk`, commBadge);
 
@@ -93,13 +96,26 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('val-rainfall').textContent = data.predicted_rainfall.toFixed(1);
 
         // 5. Drought Model
-        const droughtProbPercent = Math.round(data.drought_probability * 100);
         document.getElementById('val-drought-prob').textContent = `${droughtProbPercent}%`;
         document.getElementById('bar-drought-prob').style.width = `${droughtProbPercent}%`;
         
         const valDroughtClass = document.getElementById('val-drought-class');
         valDroughtClass.textContent = data.drought_class;
-        valDroughtClass.className = `status-text font-bold ${data.drought_class === 'HIGH' ? 'text-orange' : 'text-green'}`;
+        
+        const barDroughtClass = document.getElementById('bar-drought-class');
+        if (data.drought_class === 'HIGH') {
+            valDroughtClass.className = 'status-text font-bold text-orange';
+            barDroughtClass.className = 'fill bg-orange';
+            barDroughtClass.style.width = '100%';
+        } else if (data.drought_class === 'MODERATE') {
+            valDroughtClass.className = 'status-text font-bold text-yellow';
+            barDroughtClass.className = 'fill bg-yellow';
+            barDroughtClass.style.width = '60%';
+        } else {
+            valDroughtClass.className = 'status-text font-bold text-green';
+            barDroughtClass.className = 'fill bg-green';
+            barDroughtClass.style.width = '20%';
+        }
 
         // 6. Environmental Intel
         document.getElementById('val-env-score').textContent = data.environmental_score.toFixed(2);
@@ -155,5 +171,27 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 3000);
         }
     });
-});
 
+    // Share Report Button Logic
+    const shareReportBtn = document.getElementById('share-report-btn');
+    shareReportBtn.addEventListener('click', async () => {
+        const originalContent = shareReportBtn.innerHTML;
+        shareReportBtn.innerHTML = '<i class="ph ph-spinner-gap spin"></i> Sending...';
+        
+        try {
+            const response = await fetch(`${API_URL}/send-report`);
+            if (!response.ok) throw new Error();
+            
+            shareReportBtn.innerHTML = '<i class="ph ph-check-circle"></i> Sent!';
+            shareReportBtn.style.background = 'var(--green)';
+        } catch (error) {
+            shareReportBtn.innerHTML = '<i class="ph ph-warning-circle"></i> Failed';
+            shareReportBtn.style.background = 'var(--red)';
+        } finally {
+            setTimeout(() => {
+                shareReportBtn.innerHTML = originalContent;
+                shareReportBtn.style.background = '';
+            }, 3000);
+        }
+    });
+});

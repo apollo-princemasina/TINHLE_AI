@@ -20,6 +20,9 @@
                 <h1>TINHLE AI</h1>
             </div>
             <div class="user-actions">
+                <button id="share-report-btn" class="primary-btn pulse-glow" style="padding: 6px 12px; font-size: 13px;">
+                    <i class="ph ph-paper-plane-tilt"></i> Share Report
+                </button>
                 <button class="icon-btn"><i class="ph ph-bell"></i></button>
                 <button class="icon-btn"><i class="ph ph-gear"></i></button>
                 <div class="avatar"><i class="ph ph-user"></i></div>
@@ -119,8 +122,8 @@
                             <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"><div id="bar-drought-prob" class="fill bg-orange" style="width: 0%"></div></div>
                         </div>
                         <div class="progress-group">
-                            <div class="progress-label"><span>Drought Class</span> <span id="val-drought-class" class="status-text text-red font-bold">--</span></div>
-                            <div class="progress-bar"><div class="fill bg-red" style="width: 100%"></div></div>
+                            <div class="progress-label"><span>Drought Class</span> <span id="val-drought-class" class="status-text font-bold">--</span></div>
+                            <div class="progress-bar"><div id="bar-drought-class" class="fill" style="width: 0%"></div></div>
                         </div>
                     </div>
                 </section>
