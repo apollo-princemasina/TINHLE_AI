@@ -566,3 +566,126 @@ body {
     50% { box-shadow: 0 4px 20px rgba(16, 185, 129, 0.5); }
 }
 .pulse-glow { animation: pulse-glow 2.5s ease-in-out infinite; }
+
+/* Mobile Responsive Adjustments */
+@media (max-width: 600px) {
+    .dashboard {
+        padding: 12px 10px;
+    }
+    
+    .app-container {
+        padding-bottom: 30px;
+    }
+    
+    /* Optimize Header for Narrow Screens */
+    .header {
+        padding: 0 12px;
+        height: auto;
+        min-height: 60px;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding-top: 8px;
+        padding-bottom: 8px;
+        justify-content: center;
+    }
+    
+    .logo {
+        flex: 1;
+        justify-content: flex-start;
+    }
+    
+    .logo h1 {
+        font-size: 16px;
+    }
+    
+    .user-actions {
+        width: 100%;
+        justify-content: space-between;
+        border-top: 1px solid var(--border-color);
+        padding-top: 8px;
+        margin-top: 2px;
+    }
+    
+    .user-actions #share-report-btn {
+        flex: 1;
+        justify-content: center;
+    }
+    
+    .header .icon-btn {
+        padding: 6px;
+        font-size: 18px;
+    }
+    
+    /* Dashboard Title and Action Button */
+    .dashboard-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+    
+    .dashboard-header .primary-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 10px;
+    }
+    
+    .title-section h2 {
+        font-size: 18px;
+        text-align: center;
+    }
+    
+    .subtitle-group {
+        justify-content: center;
+    }
+    
+    /* Card Padding and Text sizes */
+    .card {
+        padding: 14px;
+    }
+    
+    .card-header h3 {
+        font-size: 13px;
+    }
+    
+    .risk-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 16px;
+    }
+    
+    .risk-gauge {
+        width: 110px;
+        height: 110px;
+    }
+    
+    .gauge-text .percentage {
+        font-size: 22px;
+    }
+    
+    .gauge-text .label {
+        font-size: 9px;
+        padding: 1px 4px;
+    }
+    
+    .driver-list li {
+        font-size: 12px;
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .recommendation-box p, 
+    .text-content p {
+        font-size: 12px;
+    }
+    
+    /* Stats Numbers */
+    .big-number {
+        font-size: 24px;
+    }
+    
+    .stat-row, .list-item {
+        font-size: 12px;
+    }
+}
