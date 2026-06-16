@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from datetime import datetime
@@ -226,20 +226,15 @@ def predict():
 
 @app.get("/send-report")
 def send_report_endpoint():
-
-    report = run_tinhle_pipeline()
-
-    # Uncomment when send_email.py exists
-
-    send_report(report)
-
-    return {
-
-        "status": "report_sent",
-
-        "report": report
-
-    }
+    try:
+        report = run_tinhle_pipeline()
+        send_report(report)
+        return {
+            "status": "report_sent",
+            "report": report
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 # =====================================
 # SERVE FRONTEND (Must be at the bottom)
