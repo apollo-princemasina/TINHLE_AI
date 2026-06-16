@@ -42,20 +42,34 @@ def fetch_nasa():
         data = response.json()
         rain = data["properties"]["parameter"]["PRECTOTCORR"]
         temp = data["properties"]["parameter"]["T2M"]
-    except requests.exceptions.RequestException as e:
-        print(f"NASA API failed: {e}. Using fallback data.")
-        dates = pd.date_range(start=start_date, end=end_date)
-        rain = {d.strftime("%Y%m%d"): float(np.random.uniform(0, 5)) for d in dates}
-        temp = {d.strftime("%Y%m%d"): float(np.random.uniform(15, 35)) for d in dates}
+        df = pd.DataFrame({
+            "date": list(rain.keys()),
+            "rainfall_nasa": list(rain.values()),
+            "temp_nasa": list(temp.values())
+        })
+    except Exception as e:
+        print(f"NASA API failed: {e}. Checking for cached data...")
+        output_file = "data/nasa_latest.csv"
+        try:
+            df = pd.read_csv(output_file)
+            if not df.empty and "date" in df.columns and "rainfall_nasa" in df.columns:
+                print(f"Using cached NASA data from {output_file} ({len(df)} rows).")
+                df["date"] = pd.to_datetime(df["date"])
+                return df
+        except Exception as cache_err:
+            print(f"Failed to load cached NASA data: {cache_err}")
 
-    # =========================
-    # BUILD DATAFRAME
-    # =========================
-    df = pd.DataFrame({
-        "date": list(rain.keys()),
-        "rainfall_nasa": list(rain.values()),
-        "temp_nasa": list(temp.values())
-    })
+        # Deterministic fallback
+        print("Generating deterministic fallback NASA data...")
+        dates = pd.date_range(start=start_date, end=end_date)
+        rng = np.random.default_rng(seed=42)
+        rain = {d.strftime("%Y%m%d"): float(rng.uniform(0, 5)) for d in dates}
+        temp = {d.strftime("%Y%m%d"): float(rng.uniform(15, 35)) for d in dates}
+        df = pd.DataFrame({
+            "date": list(rain.keys()),
+            "rainfall_nasa": list(rain.values()),
+            "temp_nasa": list(temp.values())
+        })
 
     # =========================
     # DATE CONVERSION
@@ -121,7 +135,7 @@ def fetch_nasa():
         index=False
     )
 
-    print(f"\n✔ NASA data saved to {output_file}")
+    print(f"\n[OK] NASA data saved to {output_file}")
     print(f"Rows: {len(df)}")
 
     return df

@@ -9,7 +9,25 @@ def fetch_ndvi():
     start_date = end_date - timedelta(days=730)
 
     try:
-        ee.Initialize(project="tinhle-ai")
+        # Check if service account JSON is in environment variables (for headless environments like Railway)
+        import json
+        import os
+        from google.oauth2 import service_account
+
+        gee_json = os.environ.get("GEE_SERVICE_ACCOUNT_JSON") or os.environ.get("EARTHENGINE_CREDENTIALS")
+        project_id = os.environ.get("GEE_PROJECT", "tinhle-ai")
+
+        if gee_json:
+            try:
+                info = json.loads(gee_json)
+                credentials = service_account.Credentials.from_service_account_info(info)
+                ee.Initialize(credentials, project=project_id)
+                print("Initialized Earth Engine with Service Account credentials.")
+            except Exception as auth_err:
+                print(f"Failed to authenticate with GEE service account JSON: {auth_err}. Trying default credentials...")
+                ee.Initialize(project=project_id)
+        else:
+            ee.Initialize(project=project_id)
 
         point = ee.Geometry.Point([31.2444, -17.8875])
 
@@ -51,12 +69,25 @@ def fetch_ndvi():
 
         df = pd.DataFrame(rows)
     except Exception as e:
-        print(f"Earth Engine API failed: {e}. Using fallback data.")
+        print(f"Earth Engine API failed: {e}. Checking for cached data...")
+        output_file = "data/ndvi_latest.csv"
+        try:
+            df = pd.read_csv(output_file)
+            if not df.empty and "date" in df.columns and "ndvi" in df.columns:
+                print(f"Using cached NDVI data from {output_file} ({len(df)} rows).")
+                df["date"] = pd.to_datetime(df["date"])
+                return df
+        except Exception as cache_err:
+            print(f"Failed to load cached NDVI data: {cache_err}")
+
+        # Deterministic fallback
+        print("Generating deterministic fallback NDVI data...")
         import numpy as np
         dates = pd.date_range(start=start_date, end=end_date, freq='16D')
+        rng = np.random.default_rng(seed=42)
         df = pd.DataFrame({
             "date": [d.strftime("%Y-%m-%d") for d in dates],
-            "ndvi": [float(np.random.uniform(2000, 8000)) for _ in dates]
+            "ndvi": [float(rng.uniform(2000, 8000)) for _ in dates]
         })
 
     df["date"] = pd.to_datetime(df["date"])
@@ -76,7 +107,7 @@ def fetch_ndvi():
 
     df.to_csv("data/ndvi_latest.csv", index=False)
 
-    print(f"✔ NDVI collected ({len(df)} rows)")
+    print(f"[OK] NDVI collected ({len(df)} rows)")
     return df
 
 

@@ -153,7 +153,7 @@ def build_latest_features():
         index=False
     )
 
-    print("✔ latest_inference.csv generated")
+    print("[OK] latest_inference.csv generated")
     print(latest.T)
 
 

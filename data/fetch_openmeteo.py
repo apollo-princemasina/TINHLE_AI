@@ -32,15 +32,28 @@ def fetch_openmeteo():
             "temp_max": data["temperature_2m_max"],
             "temp_min": data["temperature_2m_min"]
         })
-    except requests.exceptions.RequestException as e:
-        print(f"OpenMeteo API failed: {e}. Using fallback data.")
+    except Exception as e:
+        print(f"OpenMeteo API failed: {e}. Checking for cached data...")
+        output_file = "data/openmeteo_latest.csv"
+        try:
+            df = pd.read_csv(output_file)
+            if not df.empty and "date" in df.columns and "rainfall_openmeteo" in df.columns:
+                print(f"Using cached OpenMeteo data from {output_file} ({len(df)} rows).")
+                df["date"] = pd.to_datetime(df["date"])
+                return df
+        except Exception as cache_err:
+            print(f"Failed to load cached OpenMeteo data: {cache_err}")
+
+        # Deterministic fallback
+        print("Generating deterministic fallback OpenMeteo data...")
         import numpy as np
         dates = pd.date_range(start=start, end=end)
+        rng = np.random.default_rng(seed=42)
         df = pd.DataFrame({
             "date": [d.strftime("%Y-%m-%d") for d in dates],
-            "rainfall_openmeteo": [float(np.random.uniform(0, 5)) for _ in dates],
-            "temp_max": [float(np.random.uniform(25, 35)) for _ in dates],
-            "temp_min": [float(np.random.uniform(10, 20)) for _ in dates]
+            "rainfall_openmeteo": [float(rng.uniform(0, 5)) for _ in dates],
+            "temp_max": [float(rng.uniform(25, 35)) for _ in dates],
+            "temp_min": [float(rng.uniform(10, 20)) for _ in dates]
         })
 
     df["date"] = pd.to_datetime(df["date"])
@@ -66,7 +79,7 @@ def fetch_openmeteo():
 
     df.to_csv("data/openmeteo_latest.csv", index=False)
 
-    print("✔ Open-Meteo data saved")
+    print("[OK] Open-Meteo data saved")
     return df
 
 
