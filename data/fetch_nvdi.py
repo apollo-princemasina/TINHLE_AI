@@ -20,7 +20,10 @@ def fetch_ndvi():
         if gee_json:
             try:
                 info = json.loads(gee_json)
-                credentials = service_account.Credentials.from_service_account_info(info)
+                credentials = service_account.Credentials.from_service_account_info(
+                    info,
+                    scopes=['https://www.googleapis.com/auth/earthengine']
+                )
                 ee.Initialize(credentials, project=project_id)
                 print("Initialized Earth Engine with Service Account credentials.")
             except Exception as auth_err:
