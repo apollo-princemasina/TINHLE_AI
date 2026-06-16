@@ -11,6 +11,10 @@ def align_features(df, model):
 
     model_features = list(model.feature_names_in_)
 
+    # Map synonymous columns if they exist in df
+    if "temp_mean_nasa" in model_features and "temp_nasa" in df.columns:
+        df["temp_mean_nasa"] = df["temp_nasa"]
+
     # 1. DROP unknown features
     df = df[[col for col in df.columns if col in model_features]]
 
@@ -61,6 +65,9 @@ def run_inference():
         drought_prob = drought_model.predict_proba(df_drought)[0][1]
 
     drought_class = drought_model.predict(df_drought)[0]
+
+    print("--- Aligned Drought Features fed to Model ---")
+    print(df_drought.to_dict(orient="records")[0])
 
     # =========================
     # OUTPUT
