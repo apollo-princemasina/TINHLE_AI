@@ -1,5 +1,5 @@
 // Environment Configuration
-const API_URL = window.ENV?.API_URL || 'http://127.0.0.1:8000';
+const API_URL = window.ENV?.API_URL || 'https://tinhleai.up.railway.app';
 
 document.addEventListener('DOMContentLoaded', () => {
     const runAssessmentBtn = document.getElementById('run-assessment-btn');
