@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TINHLE AI - Agricultural Risk Dashboard</title>
+    <meta name="description" content="AI-driven agricultural intelligence and risk assessment">
+    <link rel="stylesheet" href="styles.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons for lighter, elegant icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header glass">
+            <div class="logo">
+                <div class="logo-icon"><i class="ph ph-plant"></i></div>
+                <h1>TINHLE AI</h1>
+            </div>
+            <div class="user-actions">
+                <button class="icon-btn"><i class="ph ph-bell"></i></button>
+                <button class="icon-btn"><i class="ph ph-gear"></i></button>
+                <div class="avatar"><i class="ph ph-user"></i></div>
+            </div>
+        </header>
+
+        <!-- Main Dashboard -->
+        <main class="dashboard" role="main" aria-label="Risk Assessment Dashboard">
+            <div class="dashboard-header">
+                <div class="title-section">
+                    <h2 id="dashboard-title">Agricultural Risk Overview</h2>
+                    <div class="subtitle-group">
+                        <p class="subtitle" aria-label="Location"><i class="ph ph-map-pin" aria-hidden="true"></i> <span id="location-text">Matabeleland South, Zimbabwe</span></p>
+                        <span class="divider" aria-hidden="true">&bull;</span>
+                        <p class="subtitle" aria-label="Assessment Date"><i class="ph ph-calendar-blank" aria-hidden="true"></i> <span id="current-date">June 15, 2026</span></p>
+                    </div>
+                </div>
+                <button id="run-assessment-btn" class="primary-btn pulse-glow" aria-live="polite">
+                    <i class="ph ph-play" aria-hidden="true"></i> Run New Assessment
+                </button>
+            </div>
+
+            <div class="grid-layout">
+                <!-- Main Risk Card -->
+                <section class="card main-risk-card glass span-8 relative overflow-hidden" aria-labelledby="overall-risk-title">
+                    <div class="bg-glow" aria-hidden="true"></div>
+                    <div class="card-header">
+                        <h3 id="overall-risk-title"><i class="ph ph-warning-circle" aria-hidden="true"></i> Overall TINHLE Risk Assessment</h3>
+                    </div>
+                    <div class="risk-content">
+                        <div class="risk-gauge" aria-label="Risk Level Gauge">
+                            <svg viewBox="0 0 100 100" class="gauge-svg">
+                                <circle class="gauge-bg" cx="50" cy="50" r="40"></circle>
+                                <circle id="risk-gauge-circle" class="gauge-progress" cx="50" cy="50" r="40" stroke-dasharray="251.2" stroke-dashoffset="251.2"></circle>
+                            </svg>
+                            <div class="gauge-text">
+                                <span id="tinhle-risk-percent" class="percentage">--%</span>
+                                <span id="tinhle-risk-class" class="label badge-status">WAITING</span>
+                            </div>
+                        </div>
+                        <div class="risk-drivers">
+                            <h4>Key Drivers Analysis</h4>
+                            <ul class="driver-list" aria-label="Risk Drivers">
+                                <li>
+                                    <span class="driver-name"><i class="ph ph-sun text-orange" aria-hidden="true"></i> Drought Probability</span>
+                                    <span id="drought-driver" class="status-badge critical">--</span>
+                                </li>
+                                <li>
+                                    <span class="driver-name"><i class="ph ph-drop text-blue" aria-hidden="true"></i> Environmental Health</span>
+                                    <span id="env-driver" class="status-badge severe">--</span>
+                                </li>
+                                <li>
+                                    <span class="driver-name"><i class="ph ph-users text-green" aria-hidden="true"></i> Community Risk</span>
+                                    <span id="community-driver" class="status-badge moderate">--</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Explanation Panel -->
+                <section class="card explanation-card glass span-4" aria-labelledby="risk-explanation-title">
+                    <div class="card-header">
+                        <h3 id="risk-explanation-title"><i class="ph ph-info" aria-hidden="true"></i> Risk Explanation</h3>
+                    </div>
+                    <div class="card-body text-content">
+                        <p>The TINHLE AI model currently indicates a <strong id="explanation-class" class="text-orange">--</strong> scenario for the current agricultural cycle in <strong id="explanation-loc">the selected region</strong>.</p>
+                        <p>This assessment fuses satellite telemetry (MODIS/NDVI), meteorological data, and ground-truth community intel to generate a precise localized risk profile.</p>
+                        <div class="recommendation-box" role="alert" aria-live="assertive">
+                            <strong><i class="ph ph-lightbulb" aria-hidden="true"></i> Strategic Recommendation:</strong>
+                            <p id="ai-recommendation">Run an assessment to fetch the latest strategic AI interventions for your region.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Secondary Cards -->
+                <section class="card glass span-3 mini-card" aria-labelledby="rainfall-forecast-title">
+                    <div class="card-header">
+                        <h3 id="rainfall-forecast-title"><i class="ph ph-cloud-rain text-blue" aria-hidden="true"></i> Rainfall Forecast</h3>
+                    </div>
+                    <div class="mini-content center-align">
+                        <div class="big-number"><span id="val-rainfall">--</span><span class="unit">mm</span></div>
+                        <p class="context-text">Predicted Next 30 Days</p>
+                        <div class="stat-footer baseline-context">
+                            <span id="baseline-month-info"><i class="ph ph-calendar" aria-hidden="true"></i> June Avg: 2mm (Dry Season)</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card glass span-3 mini-card" aria-labelledby="drought-model-title">
+                    <div class="card-header">
+                        <h3 id="drought-model-title"><i class="ph ph-sun text-orange" aria-hidden="true"></i> Drought Model</h3>
+                    </div>
+                    <div class="mini-content">
+                        <div class="progress-group">
+                            <div class="progress-label"><span>Drought Probability</span> <span id="val-drought-prob" class="text-orange font-bold">--%</span></div>
+                            <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"><div id="bar-drought-prob" class="fill bg-orange" style="width: 0%"></div></div>
+                        </div>
+                        <div class="progress-group">
+                            <div class="progress-label"><span>Drought Class</span> <span id="val-drought-class" class="status-text text-red font-bold">--</span></div>
+                            <div class="progress-bar"><div class="fill bg-red" style="width: 100%"></div></div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card glass span-3 mini-card" aria-labelledby="environmental-intel-title">
+                    <div class="card-header">
+                        <h3 id="environmental-intel-title"><i class="ph ph-leaf text-green" aria-hidden="true"></i> Environmental Intel</h3>
+                    </div>
+                    <div class="mini-content list-content">
+                        <div class="list-item">
+                            <div class="dot bg-yellow" aria-hidden="true"></div>
+                            <span>Environment Score</span>
+                            <strong id="val-env-score">--</strong>
+                        </div>
+                        <div class="list-item">
+                            <div class="dot bg-red" aria-hidden="true"></div>
+                            <span>Environment Label</span>
+                            <strong id="val-env-label" class="status-text">--</strong>
+                        </div>
+                        <div class="list-item">
+                            <div class="dot bg-green" aria-hidden="true"></div>
+                            <span>Pest Threat</span>
+                            <strong>Low</strong>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card glass span-3 mini-card" aria-labelledby="community-intel-title">
+                    <div class="card-header">
+                        <h3 id="community-intel-title"><i class="ph ph-users text-purple" aria-hidden="true"></i> Community Intel</h3>
+                    </div>
+                    <div class="mini-content center-align">
+                        <div class="big-number" id="val-reports">--</div>
+                        <p class="context-text uppercase">Verified Reports Used</p>
+                        <div class="stats-list mt-15">
+                            <div class="stat-row"><span>Community Risk</span> <strong id="val-community-risk">--%</strong></div>
+                            <div class="stat-row"><span>Status</span> <strong id="val-community-status" class="status-badge small">--</strong></div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

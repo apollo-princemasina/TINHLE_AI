@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+
+# Environment & Secrets — NEVER commit these
+.env
+.env.local
+.env.production
+*.env
+
+# Runtime CSVs — regenerated on every /predict call
+data/nasa_latest.csv
+data/openmeteo_latest.csv
+data/ndvi_latest.csv
+data/latest_inference.csv
+data/community_latest.csv
+data/master_dataset_with_edge_nans.csv
+
+# IDE
+.vscode/
+.idea/
+
+# Node (leftover frontend build folder)
+node_modules/
+frontend/
+
+# OS
+.DS_Store
+Thumbs.db

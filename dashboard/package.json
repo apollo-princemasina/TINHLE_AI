@@ -1,0 +1,11 @@
+{
+  "name": "tinhle-ai-dashboard",
+  "version": "1.0.0",
+  "description": "TINHLE AI - Agricultural Risk Dashboard",
+  "scripts": {
+    "start": "npx serve . -l $PORT --no-clipboard"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,25 @@
+# TINHLE AI - Production Dependencies
+# Minimal set — do not replace with a full pip freeze
+
+# API Framework
+fastapi==0.111.0
+uvicorn[standard]==0.29.0
+
+# Data & ML
+pandas==2.2.2
+numpy==1.26.4
+scikit-learn==1.4.2
+joblib==1.4.2
+
+# HTTP clients (for NASA, OpenMeteo calls)
+requests==2.32.3
+httpx==0.27.0
+
+# Earth Engine
+earthengine-api==0.1.400
+
+# Email
+# (uses stdlib smtplib — no extra package needed)
+
+# Environment Variables
+python-dotenv==1.0.1
