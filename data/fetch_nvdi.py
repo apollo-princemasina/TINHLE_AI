@@ -32,7 +32,9 @@ def fetch_ndvi():
         else:
             ee.Initialize(project=project_id)
 
-        point = ee.Geometry.Point([31.2444, -17.8875])
+        lat = float(os.environ.get("LOCATION_LAT", -17.8875))
+        lon = float(os.environ.get("LOCATION_LON", 31.2444))
+        point = ee.Geometry.Point([lon, lat])
 
         # Use a long history so rolling features have enough values
 

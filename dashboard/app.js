@@ -21,6 +21,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // Set initial baseline
     document.getElementById('baseline-month-info').innerHTML = getMonthContext(today);
 
+    // Fetch config on load to override defaults with configured location
+    const fetchConfig = async () => {
+        try {
+            const response = await fetch(`${API_URL}/api/config`);
+            if (response.ok) {
+                const config = await response.json();
+                document.getElementById('location-text').textContent = config.location;
+                document.getElementById('explanation-loc').textContent = config.location;
+            }
+        } catch (error) {
+            console.error('Failed to fetch config:', error);
+        }
+    };
+    fetchConfig();
+
     // Helper for Status Badges
     const updateBadge = (elementId, value, type) => {
         const el = document.getElementById(elementId);
@@ -94,6 +109,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 4. Rainfall Forecast
         document.getElementById('val-rainfall').textContent = data.predicted_rainfall.toFixed(1);
+
+        // Update baseline info dynamically using backend data if available
+        if (data.month && data.baseline_rainfall !== undefined) {
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            const monthName = monthNames[data.month - 1];
+            const seasonLabel = data.is_dry_season ? 'Dry Season' : 'Rainy Season';
+            document.getElementById('baseline-month-info').innerHTML = 
+                `<i class="ph ph-calendar" aria-hidden="true"></i> ${monthName} Avg: ${data.baseline_rainfall.toFixed(1)}mm (${seasonLabel})`;
+        }
 
         // 5. Drought Model
         document.getElementById('val-drought-prob').textContent = `${droughtProbPercent}%`;

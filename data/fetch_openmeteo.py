@@ -5,8 +5,12 @@ from datetime import datetime, timedelta
 
 def fetch_openmeteo():
 
-    lat = -17.8875
-    lon = 31.2444
+    import os
+    import urllib.parse
+    lat = float(os.environ.get("LOCATION_LAT", -17.8875))
+    lon = float(os.environ.get("LOCATION_LON", 31.2444))
+    timezone = os.environ.get("LOCATION_TIMEZONE", "Africa/Harare")
+    encoded_timezone = urllib.parse.quote(timezone)
 
     start = (datetime.today() - timedelta(days=35)).strftime("%Y-%m-%d")
     end = datetime.today().strftime("%Y-%m-%d")
@@ -18,7 +22,7 @@ def fetch_openmeteo():
         f"&start_date={start}"
         f"&end_date={end}"
         "&daily=precipitation_sum,temperature_2m_max,temperature_2m_min"
-        "&timezone=Africa%2FHarare"
+        f"&timezone={encoded_timezone}"
     )
 
     try:

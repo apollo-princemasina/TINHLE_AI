@@ -51,9 +51,16 @@ def build_latest_features():
     df["rainfall_openmeteo"] = df["rainfall_openmeteo"].fillna(0)
 
     # temperatures -> interpolate
-    df["temp_nasa"] = df["temp_nasa"].interpolate().ffill().bfill()
     df["temp_max"] = df["temp_max"].interpolate().ffill().bfill()
     df["temp_min"] = df["temp_min"].interpolate().ffill().bfill()
+    
+    # Compute Open-Meteo daily mean temperature as a primary fallback
+    temp_mean_openmeteo = (df["temp_max"] + df["temp_min"]) / 2
+    
+    # Fill any missing/NaN NASA temperatures using Open-Meteo mean temperature
+    df["temp_nasa"] = df["temp_nasa"].interpolate().ffill().bfill()
+    df["temp_nasa"] = df["temp_nasa"].fillna(temp_mean_openmeteo)
+    df["temp_nasa"] = df["temp_nasa"].fillna(20.0)
 
     # NDVI -> carry forward between MODIS acquisitions
     df["ndvi"] = df["ndvi"].interpolate().ffill().bfill()

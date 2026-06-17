@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from datetime import datetime
+import os
 from dotenv import load_dotenv
 
 load_dotenv()  # Load .env in local dev; Railway injects env vars in production
@@ -51,6 +52,16 @@ def api_home():
         "service": "TINHLE-AI",
         "status": "running",
         "timestamp": datetime.now().isoformat()
+    }
+
+
+@app.get("/api/config")
+def api_config():
+    return {
+        "location": os.environ.get("LOCATION_NAME", "Ruwa"),
+        "latitude": float(os.environ.get("LOCATION_LAT", -17.8875)),
+        "longitude": float(os.environ.get("LOCATION_LON", 31.2444)),
+        "timezone": os.environ.get("LOCATION_TIMEZONE", "Africa/Harare")
     }
 
 
@@ -150,10 +161,20 @@ def run_tinhle_pipeline():
 
     response = {
 
-        "location": "Ruwa",
+        "location":
+            os.environ.get("LOCATION_NAME", "Ruwa"),
 
         "timestamp":
             datetime.now().isoformat(),
+
+        "month":
+            environmental_result.get("month"),
+
+        "baseline_rainfall":
+            environmental_result.get("baseline_rain", 0.0),
+
+        "is_dry_season":
+            5 <= environmental_result.get("month", 0) <= 10,
 
         # Rainfall Model
 

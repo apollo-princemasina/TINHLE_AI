@@ -212,6 +212,9 @@ def environmental_score():
 
             "month": month,
 
+            "baseline_rain":
+                round(baseline_rain, 1),
+
             "environmental_score":
                 round(env_score, 3),
 

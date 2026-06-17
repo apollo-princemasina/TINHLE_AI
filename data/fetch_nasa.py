@@ -9,8 +9,9 @@ def fetch_nasa():
     # =========================
     # LOCATION
     # =========================
-    LAT = -17.8875
-    LON = 31.2444
+    import os
+    LAT = float(os.environ.get("LOCATION_LAT", -17.8875))
+    LON = float(os.environ.get("LOCATION_LON", 31.2444))
 
     # =========================
     # DATE RANGE
@@ -112,6 +113,13 @@ def fetch_nasa():
         .ffill()
         .bfill()
     )
+
+    # Safety fallbacks for when NASA temperature is completely missing
+    if df["temp_nasa"].isna().all():
+        print("WARNING: NASA temperature is entirely missing. Filling with 20.0°C fallback.")
+        df["temp_nasa"] = df["temp_nasa"].fillna(20.0)
+    elif df["temp_nasa"].isna().any():
+        df["temp_nasa"] = df["temp_nasa"].fillna(20.0)
 
     # =========================
     # DEBUG

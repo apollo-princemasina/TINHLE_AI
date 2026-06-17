@@ -88,7 +88,9 @@ def calculate_keyword_score(text):
 
 def fetch_community():
 
-    SHEET_URL = (
+    import os
+    SHEET_URL = os.environ.get(
+        "COMMUNITY_SHEET_URL",
         "https://docs.google.com/spreadsheets/d/"
         "101wlyOmjbchCJuhvFVT5SPq89OILTpj_z2AWXGaUCd4"
         "/export?format=csv"
@@ -166,26 +168,31 @@ def fetch_community():
         df["rainfall_score"] = (
             df[rainfall_col]
             .map(rainfall_map)
+            .fillna(0.0)
         )
 
         df["crop_score"] = (
             df[crop_col]
             .map(stress_map)
+            .fillna(0.0)
         )
 
         df["water_score"] = (
             df[water_col]
             .map(water_map)
+            .fillna(0.0)
         )
 
         df["livestock_score"] = (
             df[livestock_col]
             .map(stress_map)
+            .fillna(0.0)
         )
 
         df["concern_score"] = (
             df[concern_col]
             .map(stress_map)
+            .fillna(0.0)
         )
 
         # =====================================================
