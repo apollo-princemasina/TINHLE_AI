@@ -218,4 +218,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 3000);
         }
     });
+
+    // Logout Logic
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+            sessionStorage.removeItem('tinhle_logged_in');
+            window.location.href = 'login.html';
+        });
+    }
 });

@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>
+        if (sessionStorage.getItem('tinhle_logged_in') !== 'true') {
+            window.location.href = 'login.html';
+        }
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TINHLE AI - Agricultural Risk Dashboard</title>
@@ -24,7 +29,7 @@
                     <i class="ph ph-paper-plane-tilt"></i> Share Report
                 </button>
                 <button class="icon-btn"><i class="ph ph-bell"></i></button>
-                <button class="icon-btn"><i class="ph ph-gear"></i></button>
+                <button id="logout-btn" class="icon-btn" title="Logout"><i class="ph ph-sign-out"></i></button>
                 <div class="avatar"><i class="ph ph-user"></i></div>
             </div>
         </header>
