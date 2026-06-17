@@ -61,10 +61,7 @@ def build_latest_features():
     # =====================================
     # BASE FEATURES
     # =====================================
-    df["rainfall"] = (
-        df["rainfall_nasa"] +
-        df["rainfall_openmeteo"]
-    )
+    df["rainfall"] = df["rainfall_openmeteo"]
 
     df["temp_mean"] = (
         df["temp_max"] +

@@ -38,7 +38,7 @@ def environmental_score():
         # =====================================
 
         current_rain = float(
-            current["rainfall"]
+            current["rainfall_30d_avg"]
         )
 
         current_ndvi = float(
@@ -111,8 +111,18 @@ def environmental_score():
 
         if baseline_rain < 1:
 
-            # Naturally dry month
-            rainfall_risk = 0.2
+            # Naturally dry month: risk is lower but dynamically responds to anomalies
+            if rain_ratio >= 0.80:
+
+                rainfall_risk = 0.1  # Better moisture than normal dry season
+
+            elif rain_ratio >= 0.30:
+
+                rainfall_risk = 0.2  # Normal dry season conditions
+
+            else:
+
+                rainfall_risk = 0.4  # Unusually dry/drought conditions even for dry season
 
         else:
 
